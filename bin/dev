@@ -1,2 +1,36 @@
-#!/usr/bin/env ruby
-exec "./bin/rails", "server", *ARGV
+#!/usr/bin/env bash
+
+# Development script to run both Rails and React servers
+
+echo "🚀 Starting Rails + React development environment..."
+
+# Function to kill background processes on exit
+cleanup() {
+  echo "🛑 Shutting down servers..."
+  kill $RAILS_PID $REACT_PID 2>/dev/null
+  exit
+}
+
+# Set up trap to cleanup on script exit
+trap cleanup SIGINT SIGTERM EXIT
+
+# Start Rails server in background
+echo "📡 Starting Rails server on port 3000..."
+rails server -p 3000 &
+RAILS_PID=$!
+
+# Wait a moment for Rails to start
+sleep 3
+
+# Start React development server in background
+echo "⚛️  Starting React development server on port 3001..."
+cd frontend && npm start &
+REACT_PID=$!
+
+echo "✅ Both servers are running!"
+echo "   - Rails API: http://localhost:3000"
+echo "   - React App: http://localhost:3001"
+echo "   - Press Ctrl+C to stop both servers"
+
+# Wait for background processes
+wait
