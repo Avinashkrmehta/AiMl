@@ -49,3 +49,5 @@
 # Ignore Docker-related files
 /.dockerignore
 /Dockerfile*
+# Ignore frontend directory for backend builds
+/frontend/
