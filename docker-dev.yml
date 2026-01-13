@@ -1,3 +1,4 @@
+# Development version with hot reloading
 services:
   # Rails Backend
   backend:
@@ -7,13 +8,16 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
+      - bundle_cache:/usr/local/bundle
     ports:
       - "3000:3000"
     depends_on:
       - db
     env_file:
       - .env
-    command: bash -c "rm -f tmp/pids/server.pid && rails server -b 0.0.0.0"
+    environment:
+      - RAILS_ENV=development
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails server -b 0.0.0.0"
     networks:
       - app-network
 
@@ -30,7 +34,8 @@ services:
     depends_on:
       - backend
     environment:
-      - REACT_APP_API_URL=http://backend:3000
+      - REACT_APP_API_URL=http://localhost:3000
+      - CHOKIDAR_USEPOLLING=true
     networks:
       - app-network
 
@@ -44,11 +49,14 @@ services:
     environment:
       POSTGRES_USER: ${DATABASE_USERNAME}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    ports:
+      - "5432:5432"
     networks:
       - app-network
 
 volumes:
   postgres_data:
+  bundle_cache:
 
 networks:
   app-network:
