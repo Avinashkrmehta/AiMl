@@ -1,0 +1,19 @@
+<h1>User Dashboard</h1>
+
+<div style="padding: 20px; background-color: #d1ecf1; border-radius: 8px; margin: 20px 0;">
+  <h2>Welcome to your protected dashboard, <%= current_user.email %>!</h2>
+  <p>This page is only accessible to authenticated users.</p>
+</div>
+
+<div style="margin-top: 30px;">
+  <h3>Your Account Information:</h3>
+  <ul>
+    <li><strong>Email:</strong> <%= current_user.email %></li>
+    <li><strong>Member since:</strong> <%= current_user.created_at.strftime("%B %d, %Y") %></li>
+    <li><strong>Last sign in:</strong> <%= current_user.current_sign_in_at&.strftime("%B %d, %Y at %I:%M %p") || "First time!" %></li>
+  </ul>
+</div>
+
+<div style="margin-top: 30px;">
+  <%= link_to "← Back to Home", root_path, style: "text-decoration: none; padding: 10px 20px; background-color: #007bff; color: white; border-radius: 4px;" %>
+</div>
