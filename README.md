@@ -185,3 +185,81 @@ AiMl/
 - **Containerization**: Docker & Docker Compose
 - **Package Manager**: Yarn
 
+## ⚛️ React Frontend Integration
+
+This Rails application includes a separate React frontend that handles all UI interactions while Rails serves as the API backend.
+
+### Frontend Structure
+
+```
+frontend/
+├── public/           # Static files
+├── src/
+│   ├── components/   # React components
+│   ├── App.js        # Main App component
+│   └── index.js      # Entry point
+└── package.json      # Frontend dependencies
+```
+
+### Development with React
+
+#### Option 1: Run Both Servers Separately
+```bash
+# Terminal 1: Start Rails API server
+rails server
+
+# Terminal 2: Start React development server
+cd frontend && npm install && npm start
+```
+
+#### Option 2: Use Development Script
+```bash
+# Install frontend dependencies first
+cd frontend && npm install
+
+# Run both servers with one command
+bin/dev
+```
+
+This will start:
+- Rails API server on http://localhost:3000
+- React development server on http://localhost:3001
+
+### Frontend Development Commands
+
+| Command | Description |
+|---------|-------------|
+| `cd frontend && npm install` | Install React dependencies |
+| `cd frontend && npm start` | Start React dev server |
+| `cd frontend && npm run build` | Build React for production |
+| `rake frontend:setup` | Install deps + build React |
+| `rake frontend:build` | Build React app |
+| `bin/dev` | Start both Rails and React servers |
+
+### API Communication
+
+The React app communicates with Rails through API endpoints:
+
+```javascript
+// Example API call from React
+import axios from 'axios';
+
+const response = await axios.get('/api/health');
+```
+
+### Production Deployment
+
+In production, Rails serves the built React app:
+
+1. React app builds to `frontend/build/`
+2. Rails serves static files and handles routing
+3. API calls go to `/api/*` routes
+4. All other routes serve the React app
+
+### Architecture Benefits
+
+- 🚀 Modern React development experience with hot reloading
+- 🔧 Separate build processes and dependency management
+- 📦 Single deployment unit (Rails app contains everything)
+- ⚡ Optimized production builds
+- 🔄 Clean separation between frontend and backend concerns
